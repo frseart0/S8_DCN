@@ -1,0 +1,56 @@
+services:
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      # Consola de administracion web
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-admin}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-admin123}
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    image: ${DOCKERHUB_USERNAME:-local}/ms-administracion-archivos:latest
+    container_name: ms-administracion-archivos
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      # Perfil: prod usa Oracle Cloud, default usa H2 en memoria
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-default}
+
+      # AWS (usuario IAM de la cuenta propia, credenciales de larga duracion)
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      S3_BUCKET: ${S3_BUCKET}
+
+      # Microsoft Entra ID
+      AZURE_TENANT_ID: ${AZURE_TENANT_ID}
+      AZURE_CLIENT_ID: ${AZURE_CLIENT_ID}
+
+      # RabbitMQ
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: ${RABBITMQ_USER:-admin}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-admin123}
+
+      # Oracle Cloud (solo con perfil prod)
+      ORACLE_DB_URL: ${ORACLE_DB_URL}
+      ORACLE_DB_USER: ${ORACLE_DB_USER}
+      ORACLE_DB_PASSWORD: ${ORACLE_DB_PASSWORD}
+    volumes:
+      # En la EC2, /mnt/efs es el punto de montaje del EFS
+      - ${EFS_MOUNT:-./efs}:/app/efs
+      # Wallet de Oracle Cloud descomprimido
+      - ${ORACLE_WALLET_PATH:-./wallet}:/app/wallet:ro
