@@ -185,11 +185,11 @@
   },
   "active": "727648da6770a9ea",
   "lastOpenFiles": [
-    "02-aws-api-gateway.md",
-    "03-microsoft-entra-id.md",
-    "01-aws-s3-efs-ec2.md",
     "04-oracle-cloud.md",
     "05-rabbitmq.md",
-    "06-github-secrets.md"
+    "03-microsoft-entra-id.md",
+    "06-github-secrets.md",
+    "02-aws-api-gateway.md",
+    "01-aws-s3-efs-ec2.md"
   ]
 }

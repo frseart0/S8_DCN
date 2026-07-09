@@ -39,3 +39,5 @@ build/
 wallet/
 efs/
 ec2_guias_key.pem
+ms-guias-key.pem
+Wallet_guiasdb.zip
