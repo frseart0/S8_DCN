@@ -42,9 +42,9 @@ Alternativa rápida: una única ruta `ANY /{proxy+}` que reenvía todo al backen
 
 1. En la API → **Authorization** → **Create authorizer** → tipo **JWT**.
 2. Nombre: `entra-jwt`.
-3. **Issuer URL**: `https://login.microsoftonline.com/<AZURE_TENANT_ID>/v2.0`
-4. **Audience**: `<AZURE_CLIENT_ID>` (Application ID del app registration; si tu token trae `aud` con formato `api://<client-id>`, usa ese valor).
-5. Asocia el authorizer a **todas las rutas** (Attach authorizer). El header esperado es `Authorization: Bearer <token>`.
+	1. **Issuer URL**: `https://login.microsoftonline.com/<AZURE_TENANT_ID>/v2.0`
+3. **Audience**: `<AZURE_CLIENT_ID>` (Application ID del app registration; si tu token trae `aud` con formato `api://<client-id>`, usa ese valor).
+4. Asocia el authorizer a **todas las rutas** (Attach authorizer). El header esperado es `Authorization: Bearer <token>`.
 
 Con esto el API Gateway rechaza con `401` cualquier request sin token válido del tenant, y Spring Security valida además el **rol** (`GUIA_LECTOR` / `GUIA_OPERADOR`) de cada endpoint.
 
@@ -54,7 +54,7 @@ Con esto el API Gateway rechaza con `401` cualquier request sin token válido de
 2. La URL final queda como:
 
 ```
-https://<api-id>.execute-api.us-east-1.amazonaws.com/guias
+	https://<api-id>.execute-api.us-east-1.amazonaws.com/guias
 ```
 
 Esta es la URL a usar en Postman para las evidencias (con el token en el header `Authorization`).

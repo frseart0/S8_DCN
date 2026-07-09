@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "01-aws-s3-efs-ec2.md",
+                "file": "06-github-secrets.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "01-aws-s3-efs-ec2"
+              "title": "06-github-secrets"
             }
           }
         ]

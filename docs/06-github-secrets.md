@@ -4,24 +4,24 @@ El workflow [.github/workflows/deploy.yml](../.github/workflows/deploy.yml) nece
 
 ## Tabla completa
 
-| Secreto | Dónde encontrarlo | Notas |
-|---|---|---|
-| `DOCKERHUB_USERNAME` | Tu nombre de usuario de [hub.docker.com](https://hub.docker.com) | |
-| `DOCKERHUB_TOKEN` | Docker Hub → avatar → **Account Settings → Security → Personal access tokens → Generate new token** (permisos Read & Write) | Se usa en lugar de la contraseña |
-| `EC2_HOST` | Consola AWS → **EC2 → Instances →** tu instancia → **Public IPv4 address** (o mejor, la Elastic IP asociada, ver [01-aws-s3-efs-ec2.md](01-aws-s3-efs-ec2.md)) | Con Elastic IP no cambia al reiniciar la instancia |
-| `EC2_USER` | Depende de la AMI: `ec2-user` (Amazon Linux) o `ubuntu` (Ubuntu) | |
-| `EC2_SSH_KEY` | El `.pem` generado al crear el key pair de tu instancia (**EC2 → Key Pairs → Create key pair**) → pega el contenido completo (incluidas las líneas BEGIN/END) | Guárdalo bien: AWS solo lo entrega una vez |
-| `AWS_ACCESS_KEY_ID` | **IAM → Users →** tu usuario (ej. `ms-guias-app`) → **Security credentials → Access keys** | Credencial de larga duración; no expira sola (ver sección 0 de [01-aws-s3-efs-ec2.md](01-aws-s3-efs-ec2.md)) |
-| `AWS_SECRET_ACCESS_KEY` | Mismo lugar, se muestra una única vez al crear la access key | Guárdalo al crearla; si lo pierdes debes generar una nueva |
-| `S3_BUCKET` | Consola AWS → **S3** → nombre de tu bucket | Ej: `guias-despacho-frsea` |
-| `AZURE_TENANT_ID` | [entra.microsoft.com](https://entra.microsoft.com) → **App registrations →** tu app → **Overview → Directory (tenant) ID** | |
-| `AZURE_CLIENT_ID` | Mismo lugar → **Application (client) ID** | |
-| `RABBITMQ_USER` | Lo defines tú (no viene de ningún portal) | Ej: `admin` |
-| `RABBITMQ_PASSWORD` | Lo defines tú | Usa una contraseña fuerte |
-| `ORACLE_DB_URL` | OCI Console → **Autonomous Database → Database connection → TNS name** (ej: `guiasdb_high`) | Solo el alias, no la cadena completa |
-| `ORACLE_DB_USER` | Usuario creado en Database Actions (ver [04-oracle-cloud.md](04-oracle-cloud.md)) | Ej: `GUIAS_APP` |
-| `ORACLE_DB_PASSWORD` | La contraseña que definiste al crear ese usuario | |
-| `ORACLE_WALLET_B64` | Wallet zip descargado de OCI (**Database connection → Download wallet**) codificado en base64 | Ver comando abajo |
+| Secreto                 | Dónde encontrarlo                                                                                                                                              | Notas                                                                                                        |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `DOCKERHUB_USERNAME`    | Tu nombre de usuario de [hub.docker.com](https://hub.docker.com)                                                                                               |                                                                                                              |
+| `DOCKERHUB_TOKEN`       | Docker Hub → avatar → **Account Settings → Security → Personal access tokens → Generate new token** (permisos Read & Write)                                    | Se usa en lugar de la contraseña                                                                             |
+| `EC2_HOST`              | Consola AWS → **EC2 → Instances →** tu instancia → **Public IPv4 address** (o mejor, la Elastic IP asociada, ver [01-aws-s3-efs-ec2.md](01-aws-s3-efs-ec2.md)) | Con Elastic IP no cambia al reiniciar la instancia                                                           |
+| `EC2_USER`              | Depende de la AMI: `ec2-user` (Amazon Linux) o `ubuntu` (Ubuntu)                                                                                               |                                                                                                              |
+| `EC2_SSH_KEY`           | El `.pem` generado al crear el key pair de tu instancia (**EC2 → Key Pairs → Create key pair**) → pega el contenido completo (incluidas las líneas BEGIN/END)  | Guárdalo bien: AWS solo lo entrega una vez                                                                   |
+| `AWS_ACCESS_KEY_ID`     | **IAM → Users →** tu usuario (ej. `ms-guias-app`) → **Security credentials → Access keys**                                                                     | Credencial de larga duración; no expira sola (ver sección 0 de [01-aws-s3-efs-ec2.md](01-aws-s3-efs-ec2.md)) |
+| `AWS_SECRET_ACCESS_KEY` | Mismo lugar, se muestra una única vez al crear la access key                                                                                                   | Guárdalo al crearla; si lo pierdes debes generar una nueva                                                   |
+| `S3_BUCKET`             | Consola AWS → **S3** → nombre de tu bucket                                                                                                                     | Ej: `guias-despacho-frsea`                                                                                   |
+| `AZURE_TENANT_ID`       | [entra.microsoft.com](https://entra.microsoft.com) → **App registrations →** tu app → **Overview → Directory (tenant) ID**                                     |                                                                                                              |
+| `AZURE_CLIENT_ID`       | Mismo lugar → **Application (client) ID**                                                                                                                      |                                                                                                              |
+| `RABBITMQ_USER`         | Lo defines tú (no viene de ningún portal)                                                                                                                      | Ej: `admin`                                                                                                  |
+| `RABBITMQ_PASSWORD`     | Lo defines tú                                                                                                                                                  | Usa una contraseña fuerte                                                                                    |
+| `ORACLE_DB_URL`         | OCI Console → **Autonomous Database → Database connection → TNS name** (ej: `guiasdb_high`)                                                                    | Solo el alias, no la cadena completa                                                                         |
+| `ORACLE_DB_USER`        | Usuario creado en Database Actions (ver [04-oracle-cloud.md](04-oracle-cloud.md))                                                                              | Ej: `GUIAS_APP`                                                                                              |
+| `ORACLE_DB_PASSWORD`    | La contraseña que definiste al crear ese usuario                                                                                                               |                                                                                                              |
+| `ORACLE_WALLET_B64`     | Wallet zip descargado de OCI (**Database connection → Download wallet**) codificado en base64                                                                  | Ver comando abajo                                                                                            |
 
 ## Cómo generar `ORACLE_WALLET_B64`
 

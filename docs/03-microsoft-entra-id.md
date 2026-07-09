@@ -4,6 +4,8 @@ IDaaS del proyecto (Semanas 6 y 8). La guía original pide Azure AD B2C, pero es
 
 Portal: [entra.microsoft.com](https://entra.microsoft.com) (o portal.azure.com → Microsoft Entra ID).
 
+**IMPORTANTE: el type del Tenant debe ser workforce, no external**
+
 ## 1. App registration
 
 1. **Identity → Applications → App registrations → New registration**.
@@ -17,20 +19,26 @@ En **Overview** anota:
 - **Application (client) ID** → variable/secreto `AZURE_CLIENT_ID`.
 - **Directory (tenant) ID** → variable/secreto `AZURE_TENANT_ID`.
 
+
+
 ## 2. Client secret (para obtener tokens desde Postman)
 
 1. En la app → **Certificates & secrets → New client secret**.
 2. Descripción `postman`, expiración 6 meses.
 3. Copia el **Value** inmediatamente (no se vuelve a mostrar). Se usa solo en Postman, no en el backend.
 
+
+
 ## 3. Crear los 2 App Roles
 
 En la app → **App roles → Create app role** (dos veces):
 
-| Display name | Value | Allowed member types | Descripción |
-|---|---|---|---|
-| Lector de guías | `GUIA_LECTOR` | Users/Groups | Solo puede descargar guías |
-| Operador de guías | `GUIA_OPERADOR` | Users/Groups | Puede usar el resto de los endpoints |
+
+| Display name      | Value           | Allowed member types | Descripción                          |
+| ----------------- | --------------- | -------------------- | ------------------------------------ |
+| Lector de guías   | `GUIA_LECTOR`   | Users/Groups         | Solo puede descargar guías           |
+| Operador de guías | `GUIA_OPERADOR` | Users/Groups         | Puede usar el resto de los endpoints |
+
 
 El `Value` es lo que llega en el claim `roles` del JWT y lo que Spring Security convierte en `ROLE_GUIA_LECTOR` / `ROLE_GUIA_OPERADOR` (ver `SecurityConfig`).
 
@@ -40,6 +48,8 @@ El `Value` es lo que llega en el claim `roles` del JWT y lo que Spring Security 
 2. **Users and groups → Add user/group**.
 3. Asigna un usuario con rol **Lector de guías** y otro con **Operador de guías** (crea usuarios de prueba en **Identity → Users** si es necesario).
 
+
+
 ## 5. Exponer la API y scope
 
 Para que el token de acceso incluya los roles y tenga como audiencia esta app:
@@ -47,6 +57,8 @@ Para que el token de acceso incluya los roles y tenga como audiencia esta app:
 1. En la app → **Expose an API → Add** (Application ID URI): acepta el valor `api://<client-id>`.
 2. **Add a scope**: nombre `acceso_api`, consentimiento **Admins and users**, estado habilitado.
 3. En **API permissions → Add a permission → My APIs** → selecciona la app → marca `acceso_api` → **Grant admin consent**.
+
+
 
 ## 6. Obtener token en Postman (evidencia)
 
@@ -75,12 +87,17 @@ spring.security.oauth2.resourceserver.jwt.issuer-uri=https://login.microsoftonli
   - `GET /guias/{id}/descargar` → requiere rol `GUIA_LECTOR`.
   - Cualquier otro endpoint → requiere rol `GUIA_OPERADOR`.
 
+
+
 ## 8. Matriz de pruebas para evidencias
 
-| Escenario | Resultado esperado |
-|---|---|
-| Sin token | 401 Unauthorized |
-| Token usuario GUIA_LECTOR → `GET /guias/1/descargar` | 200 OK |
-| Token usuario GUIA_LECTOR → `POST /guias` | 403 Forbidden |
-| Token usuario GUIA_OPERADOR → `POST /guias` | 201 Created |
-| Token usuario GUIA_OPERADOR → `GET /guias/1/descargar` | 403 Forbidden |
+
+| Escenario                                              | Resultado esperado |
+| ------------------------------------------------------ | ------------------ |
+| Sin token                                              | 401 Unauthorized   |
+| Token usuario GUIA_LECTOR → `GET /guias/1/descargar`   | 200 OK             |
+| Token usuario GUIA_LECTOR → `POST /guias`              | 403 Forbidden      |
+| Token usuario GUIA_OPERADOR → `POST /guias`            | 201 Created        |
+| Token usuario GUIA_OPERADOR → `GET /guias/1/descargar` | 403 Forbidden      |
+
+
